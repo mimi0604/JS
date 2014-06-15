@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>The Timer of Destiny!</title>
+    <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+        <script type="text/javascript" src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script>
+
+var timer = null;
+var counter = 0;
+
+function setTimer() {
+       var second_first_digit = 0,
+        second_second_digit = 0,
+        minute_first_digit = 0,
+        minute_second_digit = 0;
+
+    if (counter < 10){ 
+      second_second_digit = counter;
+    }
+    if (counter >= 10 && counter<60){
+      second_first_digit  = (counter/10) >> 0; 
+      second_second_digit = counter % 10;
+    }
+    if (counter >= 60 && counter < 600){
+      minute_second_digit = (counter/60) >> 0;  
+      second_first_digit  = (counter%60)/10 >> 0; 
+      second_second_digit = (counter%60) % 10;
+    } 
+    if (counter >= 600 && counter < 6000){
+      minute_first_digit = (counter/60)/10 >> 0; 
+      minute_second_digit = ((counter/60)>>0) % 10;  
+      second_first_digit  = (counter%60)/10 >> 0; 
+      second_second_digit = (counter%60) % 10;
+    } 
+    $("#minute-first-digit").html(minute_first_digit);
+    $("#minute-second-digit").html(minute_second_digit);
+    $("#second-first-digit").html(second_first_digit);
+    $("#second-second-digit").html(second_second_digit); 
+}
+function tictacup(timeLimit){
+    if (counter === timeLimit){
+      stopInterval();
+    } else {
+      counter++;
+      setTimer();
+    }
+
+}
+function tictacdown(timeLimit){
+    if(counter < 0){
+        stopInterval();
+    } else {
+        setTimer();
+        counter--;
+    }
+}
+function reset()
+{
+    clearInterval(timer);
+    counter=0;
+    setTimer();
+}
+function startUpInterval(timeLimit)
+{
+counter = 0;    
+timer= setInterval(function(){tictacup(timeLimit);}, 1000);
+}
+function startDownInterval(timeLimit)
+{
+counter = timeLimit;     
+timer= setInterval(function(){tictacdown(timeLimit);}, 1000);
+}
+function stopInterval()
+{
+    clearInterval(timer);
+}
+
+$(document).ready(function() {
+   $('#count_up').on('click', function(){
+     var minutes = $('#minutes').val(); 
+     var seconds = $('#seconds').val();
+     var timeLimitCurrent = minutes * 60 + seconds;
+     timeLimitCurrent = parseInt(timeLimitCurrent);
+     reset();    
+     startUpInterval(timeLimitCurrent);
+   });
+   $('#count_down').on('click', function(){
+     var minutes = $('#minutes').val(); 
+     var seconds = $('#seconds').val();
+     var timeLimitCurrent = minutes * 60 + seconds;
+     timeLimitCurrent = parseInt(timeLimitCurrent);
+     reset();
+     startDownInterval(timeLimitCurrent);
+   });
+   $('#reset').on('click', function(){
+     reset();
+   });
+});
+
+</script>
+</head>
+<body>
+    <div class="container">
+        <h1>The Timer of Destiny!</h1>
+        <div class="row">
+            <div class="col-xs-4">
+                <h2>Set the timer:</h2>
+                <div>
+                    <label for="minutes">Minutes:</label>
+                    <input class="input-lg time" min="0" id="minutes" type="number" value=0 >
+                </div>
+
+                <div>
+                    <label for="seconds">Seconds:</label>
+                    <input class="input-lg time" min="0" max="60" id="seconds" type="number" value=0 >
+                </div>
+
+                <div id="buttons">
+                    <button id="count_up" class="btn btn-lg btn-success">Start Counting Up!</button>
+                    <button id="count_down" class="btn btn-lg btn-success">Start Counting Down!</button>
+                </div>
+            </div>
+
+            <div class="col-xs-8">
+                <p id="timer">
+                    <span id="minute-first-digit">0</span>
+                    <span id="minute-second-digit">0</span>
+                    :
+                    <span id="second-first-digit">0</span>
+                    <span id="second-second-digit">0</span>
+                </p>
+                <button id="reset" class="btn btn-danger">Stop and Reset!</button>
+            </div>
+        </div>
+    </div>
+
+
+</body>
+</html>
