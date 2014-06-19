@@ -160,8 +160,14 @@
     var fries = items.filter(function(value){
       return value.type === "fries";
     });
-    var sortedBeers = beer.map(function(value){return value.score;}).sort(function(a, b){return a-b;});
-    var sortedFries = fries.map(function(value){return value.score;}).sort(function(a, b){return a-b;});
+  //  var sortedBeers = beer.map(function(value){return value.score;}).sort(function(a, b){return a-b;});
+  //  var sortedFries = fries.map(function(value){return value.score;}).sort(function(a, b){return a-b;});
+    var
+      numericSort = function(a, b) { return a - b; },
+      takeScore = function(value) { return value.score; };
+
+    var sortedBeers = beer.map(takeScore).sort(numericSort);
+    var sortedFries = fries.map(takeScore).sort(numericSort);
 
     return sortedBeers.map(function(x, index){ return sortedFries[index] * x;}).reduce(function(x, y){return x + y;});
  };
