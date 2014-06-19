@@ -39,7 +39,8 @@ function setTimer() {
     $("#minute-second-digit").html(minute_second_digit);
     $("#second-first-digit").html(second_first_digit);
     $("#second-second-digit").html(second_second_digit); 
-}
+} 
+
 function tictacup(timeLimit){
     if (counter === timeLimit){
       stopInterval();
@@ -47,8 +48,8 @@ function tictacup(timeLimit){
       counter++;
       setTimer();
     }
-
 }
+
 function tictacdown(timeLimit){
     if(counter < 0){
         stopInterval();
@@ -57,41 +58,39 @@ function tictacdown(timeLimit){
         counter--;
     }
 }
-function reset()
-{
+
+function reset(){
     clearInterval(timer);
-    counter=0;
+    counter = 0;
     setTimer();
 }
-function startUpInterval(timeLimit)
-{
-counter = 0;    
-timer= setInterval(function(){tictacup(timeLimit);}, 1000);
+
+function startUpInterval(timeLimit){
+    counter = 0;    
+    timer = setInterval(function(){tictacup(timeLimit);}, 1000);
 }
-function startDownInterval(timeLimit)
-{
-counter = timeLimit;     
-timer= setInterval(function(){tictacdown(timeLimit);}, 1000);
+
+function startDownInterval(timeLimit){
+    counter = timeLimit;     
+    timer = setInterval(function(){tictacdown(timeLimit);}, 1000);
 }
-function stopInterval()
-{
+
+function stopInterval(){
     clearInterval(timer);
 }
 
 $(document).ready(function() {
    $('#count_up').on('click', function(){
-     var minutes = $('#minutes').val(); 
-     var seconds = $('#seconds').val();
+     var minutes = parseInt($('#minutes').val()); 
+     var seconds = parseInt($('#seconds').val());
      var timeLimitCurrent = minutes * 60 + seconds;
-     timeLimitCurrent = parseInt(timeLimitCurrent);
      reset();    
      startUpInterval(timeLimitCurrent);
    });
    $('#count_down').on('click', function(){
-     var minutes = $('#minutes').val(); 
-     var seconds = $('#seconds').val();
+     var minutes = parseInt($('#minutes').val()); 
+     var seconds = parseInt($('#seconds').val());
      var timeLimitCurrent = minutes * 60 + seconds;
-     timeLimitCurrent = parseInt(timeLimitCurrent);
      reset();
      startDownInterval(timeLimitCurrent);
    });
