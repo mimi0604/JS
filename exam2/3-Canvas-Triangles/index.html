@@ -1,0 +1,145 @@
+<html>
+<script type="text/javascript">
+var canvas, ctx, flag = false,
+    pointX = [0, 0, 0],
+    pointY = [0, 0, 0],
+    saved_canvas = 1,
+    dot_flag = false;
+    var count_dots = 0;
+var x = "black",
+    y = 2;
+
+function init() {
+    canvas = document.getElementById('can');
+    ctx = canvas.getContext("2d");
+    canvas.addEventListener("mousedown", function (e) {
+        createPoint(e)
+    }, false);
+}
+
+function color(obj) {
+    switch (obj.id) {
+        case "green":
+            x = "green";
+            break;
+        case "blue":
+            x = "blue";
+            break;
+        case "red":
+            x = "red";
+            break;
+        case "yellow":
+            x = "yellow";
+            break;
+        case "orange":
+            x = "orange";
+            break;
+        case "black":
+            x = "black";
+            break;
+        case "white":
+            x = "white";
+            break;
+    }
+    
+    y = 2;
+
+}
+
+function draw() {
+
+
+    // Draw triangle
+    ctx.fillStyle=x;
+    ctx.beginPath();
+    ctx.moveTo(pointX[0],pointY[0]);
+    ctx.lineTo(pointX[1],pointY[1]);
+    ctx.lineTo(pointX[2],pointY[2]);
+    ctx.closePath();
+    ctx.fill();
+}
+
+function createPoint(e) {
+   
+        pointX[count_dots] = e.clientX - canvas.offsetLeft;
+        pointY[count_dots] = e.clientY - canvas.offsetTop;
+
+        flag = true;
+        dot_flag = true;
+        if (dot_flag) {
+            ctx.beginPath();
+            ctx.fillStyle = x;
+            ctx.fillRect(pointX[count_dots], pointY[count_dots], 2, 2);
+            ctx.closePath();
+            dot_flag = false;
+        }
+        count_dots++;
+        if(count_dots === 3){
+           draw();
+           count_dots = 0;
+        }
+       
+}
+
+
+
+function save() {
+    //document.getElementById("canvasimg").style.border = "2px solid";
+    //var dataURL = canvas.toDataURL();
+    var canvas = document.getElementById('can');
+    localStorage.setItem(saved_canvas, canvas.toDataURL());
+    document.getElementById('select_canvas').disabled = false;
+    document.getElementById('load').disabled = false;
+    document.getElementById('select_canvas').innerHTML += '<option value="'+ saved_canvas +'">' + "Canvas " + saved_canvas + '</option>';    
+    saved_canvas++;
+}
+function clearCanvas() {
+
+    var canvas = document.getElementById('can');
+    var ctx = canvas.getContext("2d");
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+     
+}
+function clearCanvasConfirm() {
+ if (confirm('Are you sure you want to clear the canvas?')) {
+   clearCanvas();
+ }    
+}
+
+function load() {
+  clearCanvas();  
+  var e = document.getElementById("select_canvas");    
+  var canvasName = e.options[e.selectedIndex].value; 
+  var dataURL = localStorage.getItem(canvasName);
+  var img = new Image;
+  img.src = dataURL;
+  img.onload = function () {
+    var canvas = document.getElementById('can');
+    var ctx = canvas.getContext("2d");
+    ctx.drawImage(img, 0, 0);
+  };
+}
+</script>
+<body onload="init()">
+
+    <div >Choose Color</div>
+    <div style="width:15px;height:15px;background:green;display:inline-block" id="green" onclick="color(this)"></div>
+    <div style="width:15px;height:15px;background:blue;display:inline-block" id="blue" onclick="color(this)"></div>
+    <div style="width:15px;height:15px;background:red;display:inline-block" id="red" onclick="color(this)"></div>
+    <div style="width:15px;height:15px;background:yellow;display:inline-block" id="yellow" onclick="color(this)"></div>
+    <div style="width:15px;height:15px;background:orange;display:inline-block" id="orange" onclick="color(this)"></div>
+    <div style="width:15px;height:15px;background:black;display:inline-block" id="black" onclick="color(this)"></div>
+
+
+    <div><canvas id="can" width="400" height="400" style="border:2px solid;"></canvas></div>
+    <select id="select_canvas" disabled>
+      <option>Select Canvas</option>
+   </select>
+    <input type="button" value="load" id="load" size="30" onclick="load()" disabled />  
+
+    <input type="button" value="save" id="save" size="30" onclick="save()" style="margin-left: 140px;"/>
+    <input type="button" value="clear" id="clear" size="30" onclick="clearCanvasConfirm()" />
+ 
+
+</body>
+</html>

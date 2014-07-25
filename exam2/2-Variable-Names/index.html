@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>People Load</title>
+    <script src="jquery.min.js"></script>
+    <script type="text/javascript">
+	$(document ).ready(function() {
+		$.getJSON( "http://localhost:8080/names", function( data ) {
+			data.forEach(function( details ) {
+         		$('.names').append('<input type="text" class="name" id="'+ details.nameId +'" value="' + details.name + '"/><button class="update-name" person-id="' + details.nameId + '" disabled>Update Name</button><br />');
+       		});
+
+            $('.name').on('keyup',function(){
+      	       
+               var buttonId = $(this).attr('id');
+               $('[person-id=' + buttonId + ']').removeAttr('disabled');
+            });
+
+      	    $('.update-name').on('click',function(){
+      		
+           	    var nameId = $(this).attr('person-id');
+           	    var name = $("#"+nameId).val();
+                
+               
+                
+                 var sendInfo = {
+                 	name: name, 
+                 	nameId: nameId 
+                 };
+                
+                $.ajax({
+                     type: "POST",
+                     url: "http://localhost:8080/name",
+                     dataType: "json",
+                     contentType: "application/json",
+                     success: function (msg) {
+                     if (msg) {
+                 
+                       location.reload(true);
+                     }
+                 },
+
+                 data: JSON.stringify(sendInfo)
+                });
+
+      	    });
+        });
+    });
+    </script>
+</head>
+<body>
+<div class="names">
+</div>
+</body>
+</html>
