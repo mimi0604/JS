@@ -1,5 +1,5 @@
  var data = require("./data");
-  var checkins = [ ];
+  var checkins = {};
   data.forEach(function( details ) {
 
        if (!checkins[details.fields.student + details.fields.date]){
