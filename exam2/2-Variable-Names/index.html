@@ -2,12 +2,21 @@
 <html>
 <head>
 	<title>People Load</title>
-    <script src="jquery.min.js"></script>
-    <script type="text/javascript">
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="bower_components/handlebars/handlebars.min.js"></script>
+    
+    <script type="text/javascript">    
 	$(document ).ready(function() {
-		$.getJSON( "http://localhost:8080/names", function( data ) {
-			data.forEach(function( details ) {
-         		$('.names').append('<input type="text" class="name" id="'+ details.nameId +'" value="' + details.name + '"/><button class="update-name" person-id="' + details.nameId + '" disabled>Update Name</button><br />');
+		var baseURL = "http://localhost:8080/";
+    $.getJSON( baseURL + "names", function( data ) {
+      var source   = $("#entry-template").html(),
+          template = Handlebars.compile(source),
+          context,
+          html;
+      data.forEach(function( details ) {
+          context = {nameId: details.nameId, name: details.name};
+                html    = template(context);  
+            $('.names').append(html);
        		});
 
             $('.name').on('keyup',function(){
@@ -18,19 +27,16 @@
 
       	    $('.update-name').on('click',function(){
       		
-           	    var nameId = $(this).attr('person-id');
-           	    var name = $("#"+nameId).val();
-                
-               
-                
-                 var sendInfo = {
+           	    var nameId = $(this).attr('person-id'),
+           	    name = $("#"+nameId).val(),
+                sendInfo = {
                  	name: name, 
                  	nameId: nameId 
                  };
                 
                 $.ajax({
                      type: "POST",
-                     url: "http://localhost:8080/name",
+                     url: baseURL + "name",
                      dataType: "json",
                      contentType: "application/json",
                      success: function (msg) {
@@ -51,5 +57,8 @@
 <body>
 <div class="names">
 </div>
+<script id="entry-template" type="text/x-handlebars-template">
+  <input type="text" class="name" id="{{nameId}}" value="{{name}}"/><button class="update-name" person-id="{{nameId}}" disabled>Update Name</button><br />
+</script>
 </body>
 </html>
