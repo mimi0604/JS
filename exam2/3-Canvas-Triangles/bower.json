@@ -1,0 +1,20 @@
+{
+  "name": "3-Canvas-Triangles",
+  "version": "0.0.0",
+  "homepage": "https://github.com/HackBulgaria/Frontend-JavaScript-1",
+  "authors": [
+    "mimi0604 <mimi.bouyuklieva@gmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery-ui": "~1.11.0",
+    "jquery": "~2.1.1"
+  }
+}
